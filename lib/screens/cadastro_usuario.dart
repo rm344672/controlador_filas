@@ -16,7 +16,7 @@ class _CadastroWidgetState extends State<CadastroWidget> {
         appBar: AppBar(
           title: const Text("Cadastro de Usuários"),
         ),
-        body: SingleChildScrollView(
+        body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Padding(

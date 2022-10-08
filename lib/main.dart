@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_fila/screens/admin.dart';
-import 'package:gestor_fila/screens/cadastro.dart';
+import 'package:gestor_fila/screens/cadastro_usuario.dart';
 import 'package:gestor_fila/screens/home.dart';
 
 void main() {
@@ -14,13 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Cadastro de filas',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       initialRoute: "/",
       routes: {
-        "/":(context) => const HomeWidget(),
+        "/": (context) => const HomeWidget(),
         "/admin": (context) => const adminWidget(),
         "/cadastro": (context) => const CadastroWidget()
       },

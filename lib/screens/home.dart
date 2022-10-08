@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gestor_fila/screens/cadastro.dart';
+import 'package:gestor_fila/screens/cadastro_usuario.dart';
+import 'package:gestor_fila/screens/entrar_fila.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       appBar: AppBar(
         title: const Text("Login"),
       ),
-      body: SingleChildScrollView(
+      body: Center(
         child: Column(
           children: [
             Padding(
@@ -46,25 +47,28 @@ class _HomeWidgetState extends State<HomeWidget> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 5.0),
-                    child: ElevatedButton(onPressed: () {
-                      Navigator.pushNamed(context, "/admin");
-                    }, child: const Text("Login")),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 5.0),
-                    child: ElevatedButton(onPressed: () {
+                padding: const EdgeInsets.only(top: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5.0),
+                      child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/admin");
+                          },
+                          child: const Text("Login")),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 5.0),
+                      child: ElevatedButton(
+                          onPressed: () {
                             Navigator.pushNamed(context, "/cadastro");
-                          }, child: const Text("Cadastrar")),
-                  )
-                ],
-              )
-            ),
+                          },
+                          child: const Text("Cadastrar")),
+                    )
+                  ],
+                )),
           ],
         ),
       ),
