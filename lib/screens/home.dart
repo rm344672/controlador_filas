@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gestor_fila/screens/cadastro.dart';
 
-class homeWidget extends StatelessWidget {
-  const homeWidget({Key? key}) : super(key: key);
+class HomeWidget extends StatefulWidget {
+  const HomeWidget({Key? key}) : super(key: key);
 
   @override
+  State<HomeWidget> createState() => _HomeWidgetState();
+}
+
+class _HomeWidgetState extends State<HomeWidget> {
+  @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(context, designSize: const Size(700, 1400));
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Controle de filas"),
+        title: const Text("Login"),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -15,28 +23,26 @@ class homeWidget extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 60.0, bottom: 30.0),
               child: Center(
-                child: Container(
+                child: SizedBox(
                     width: 150,
                     height: 100,
                     child: Image.asset('images/queue-logo.png')),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                decoration: const InputDecoration(
-                    labelText: 'Email',
-                    hintText: 'Digite seu email'),
+                decoration: InputDecoration(
+                    labelText: 'Email', hintText: 'Digite seu email'),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, top: 15, bottom: 0),
+            const Padding(
+              padding:
+                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
               child: TextField(
                 obscureText: true,
                 decoration: InputDecoration(
-                    labelText: 'Senha',
-                    hintText: 'Digite a sua senha'),
+                    labelText: 'Senha', hintText: 'Digite a sua senha'),
               ),
             ),
             Padding(
@@ -52,7 +58,13 @@ class homeWidget extends StatelessWidget {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),
-                    child: ElevatedButton(onPressed: () {}, child: const Text("Cadastrar")),
+                    child: ElevatedButton(onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const CadastroWidget()));
+                          }, child: const Text("Cadastrar")),
                   )
                 ],
               )

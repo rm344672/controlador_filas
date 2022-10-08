@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/":(context) => const homeWidget(),
+        "/":(context) => const HomeWidget(),
         "/admin": (context) => const adminWidget()
       },
     );
