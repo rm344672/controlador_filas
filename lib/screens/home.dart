@@ -46,29 +46,25 @@ class _HomeWidgetState extends State<HomeWidget> {
               ),
             ),
             Padding(
-                padding: const EdgeInsets.only(top: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 5.0),
-                      child: ElevatedButton(
-                          onPressed: () {}, child: const Text("Login")),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 5.0),
-                      child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CadastroWidget()));
-                          },
-                          child: const Text("Cadastrar")),
-                    )
-                  ],
-                )),
+              padding: const EdgeInsets.only(top: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 5.0),
+                    child: ElevatedButton(onPressed: () {
+                      Navigator.pushNamed(context, "/admin");
+                    }, child: const Text("Login")),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 5.0),
+                    child: ElevatedButton(onPressed: () {
+                            Navigator.pushNamed(context, "/cadastro");
+                          }, child: const Text("Cadastrar")),
+                  )
+                ],
+              )
+            ),
           ],
         ),
       ),
