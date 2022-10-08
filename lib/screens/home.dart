@@ -55,11 +55,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       padding: const EdgeInsets.only(right: 5.0),
                       child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const EntrarFilaWidget()));
+                            Navigator.pushNamed(context, "/admin");
                           },
                           child: const Text("Login")),
                     ),
@@ -67,11 +63,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       padding: const EdgeInsets.only(left: 5.0),
                       child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CadastroWidget()));
+                            Navigator.pushNamed(context, "/cadastro");
                           },
                           child: const Text("Cadastrar")),
                     )
