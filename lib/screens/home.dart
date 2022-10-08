@@ -46,7 +46,9 @@ class homeWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 5.0),
-                    child: ElevatedButton(onPressed: () {}, child: const Text("Login")),
+                    child: ElevatedButton(onPressed: () {
+                      Navigator.pushNamed(context, "/admin");
+                    }, child: const Text("Login")),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),
