@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gestor_fila/screens/admin.dart';
+import 'package:gestor_fila/screens/cadastro.dart';
 import 'package:gestor_fila/screens/home.dart';
 
 void main() {
@@ -20,7 +21,8 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/":(context) => const HomeWidget(),
-        "/admin": (context) => const adminWidget()
+        "/admin": (context) => const adminWidget(),
+        "/cadastro": (context) => const CadastroWidget()
       },
     );
   }

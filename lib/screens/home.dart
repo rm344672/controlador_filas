@@ -59,11 +59,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   Padding(
                     padding: const EdgeInsets.only(left: 5.0),
                     child: ElevatedButton(onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const CadastroWidget()));
+                            Navigator.pushNamed(context, "/cadastro");
                           }, child: const Text("Cadastrar")),
                   )
                 ],
