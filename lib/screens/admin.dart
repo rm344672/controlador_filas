@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class adminWidget extends StatefulWidget {
-  const adminWidget({Key? key}) : super(key: key);
+class AdminWidget extends StatefulWidget {
+  const AdminWidget({Key? key}) : super(key: key);
 
   @override
-  _adminWidget createState() => _adminWidget();
+  State<AdminWidget> createState() => _AdminWidgetState();
 }
 
-class _adminWidget extends State<adminWidget> {
+class _AdminWidgetState extends State<AdminWidget> {
   String proximoNaFila = "1";
 
   @override
@@ -16,35 +16,30 @@ class _adminWidget extends State<adminWidget> {
       appBar: AppBar(
         title: const Text("Controle de filas - Admin"),
       ),
-      body: Container(
+      body: SizedBox(
         height: double.maxFinite,
         child: Stack(
-          // ignore: prefer_const_literals_to_create_immutables
           children: [
-            // ignore: prefer_const_constructors
-            Positioned(
-              child: const Padding(
-                padding: EdgeInsets.only(top: 50.0),
+            const Positioned(
+              child: Padding(
+                  padding: EdgeInsets.only(top: 50.0),
                   child: Align(
-                alignment: FractionalOffset.topCenter,
-                child: Text("Próxima pessoa da fila:",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
-                        fontSize: 20)),
-              )),
+                    alignment: FractionalOffset.topCenter,
+                    child: Text("Próxima pessoa da fila:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            decoration: TextDecoration.none,
+                            fontSize: 20)),
+                  )),
             ),
-            // ignore: prefer_const_constructors
             Positioned(
-                // ignore: unnecessary_new
-                child: new Align(
+                child: Align(
               alignment: FractionalOffset.center,
               child: Center(
                 child: Text(proximoNaFila,
                     textAlign: TextAlign.center,
-                    // ignore: prefer_const_constructors
-                    style: TextStyle(
+                    style: const TextStyle(
                         color: Colors.black,
                         decoration: TextDecoration.none,
                         fontSize: 32)),
