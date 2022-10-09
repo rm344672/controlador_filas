@@ -10,32 +10,50 @@ class FilaWidget extends StatefulWidget {
 }
 
 class _FilaWidgetState extends State<FilaWidget> {
+  String proximoNaFila = "1";
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(700, 1400));
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("Aguardando vez"),
+      appBar: AppBar(
+        title: const Text("Controle de filas - Admin"),
+      ),
+      body: SizedBox(
+        height: double.maxFinite,
+        child: Stack(
+          children: [
+            const Positioned(
+              child: Padding(
+                  padding: EdgeInsets.only(top: 50.0),
+                  child: Align(
+                    alignment: FractionalOffset.topCenter,
+                    child: Text("Sua posição atual na fila:",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Colors.black,
+                            decoration: TextDecoration.none,
+                            fontSize: 20)),
+                  )),
+            ),
+            Positioned(
+                child: Align(
+              alignment: FractionalOffset.center,
+              child: Center(
+                child: Text(proximoNaFila,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.none,
+                        fontSize: 32)),
+              ),
+            )),
+          ],
         ),
-        body: Center(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-              const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 15),
-                  child: TextField(
-                      decoration: InputDecoration(labelText: "Sua posicao"))),
-              Padding(
-                padding: const EdgeInsets.only(left: 5.0),
-                child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const EntrarFilaWidget()));
-                    },
-                    child: const Text("Sair da fila")),
-              )
-            ])));
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () => {Navigator.pushNamed(context, "/entrar_na_fila")},
+          label: const Text('Sair da Fila')),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+    );
   }
 }

@@ -33,10 +33,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
             padding: const EdgeInsets.only(left: 5.0),
             child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const FilaWidget()));
+                  Navigator.pushNamed(context, "/fila");
                 },
                 child: const Text("Entrar na fila de Espera")),
           )

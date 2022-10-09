@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gestor_fila/screens/cadastro_usuario.dart';
-import 'package:gestor_fila/screens/entrar_fila.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -55,7 +53,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                       padding: const EdgeInsets.only(right: 5.0),
                       child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushNamed(context, "/admin");
+                            Navigator.pushNamed(context, "/entrar_na_fila");
                           },
                           child: const Text("Login")),
                     ),
