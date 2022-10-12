@@ -91,7 +91,7 @@ class _AdminWidgetState extends State<AdminWidget> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("fila")
-            .orderBy("id_atual", descending: true)
+            .orderBy("id_atual", descending: false)
             .limit(1)
             .snapshots(),
         builder: (context, snapshot) {
