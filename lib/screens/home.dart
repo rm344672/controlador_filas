@@ -12,6 +12,31 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+  Usuario? currentUser = null;
+  getCurrentUser() async {
+    String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
+    if (emailUserLogged != null) {
+      var findUserByEmail = await FirebaseFirestore.instance
+          .collection("usuarios")
+          .where("email", isEqualTo: emailUserLogged)
+          .get();
+
+      Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
+      if (user.admin) {
+        Navigator.pushNamed(context, "/admin");
+      } else {
+        Navigator.pushNamed(context, "/entrar_na_fila");
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getCurrentUser();
+  }
+
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
 
@@ -21,6 +46,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Login"),
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
@@ -112,7 +138,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: senha);
-  
+
       var result = await FirebaseFirestore.instance
           .collection("usuarios")
           .where("email", isEqualTo: email)

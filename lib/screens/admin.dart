@@ -41,44 +41,59 @@ class _AdminWidgetState extends State<AdminWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: const Text("Controle de filas - Admin"),
-          automaticallyImplyLeading: false),
-      body: SizedBox(
-        height: double.maxFinite,
-        child: Stack(
-          children: [
-            const Positioned(
-              child: Padding(
-                  padding: EdgeInsets.only(top: 50.0),
-                  child: Align(
-                    alignment: FractionalOffset.topCenter,
-                    child: Text("Próxima pessoa da fila:",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color: Colors.black,
-                            decoration: TextDecoration.none,
-                            fontSize: 20)),
-                  )),
-            ),
-            Positioned(
-                child: Align(
-              alignment: FractionalOffset.center,
-              child: Center(
-                child: Text(proximoNaFila,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
-                        fontSize: 32)),
+        appBar: AppBar(title: const Text("Controle de filas - Admin")),
+        body: SizedBox(
+          height: double.maxFinite,
+          child: Stack(
+            children: [
+              const Positioned(
+                child: Padding(
+                    padding: EdgeInsets.only(top: 50.0),
+                    child: Align(
+                      alignment: FractionalOffset.topCenter,
+                      child: Text("Próxima pessoa da fila:",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.black,
+                              decoration: TextDecoration.none,
+                              fontSize: 20)),
+                    )),
               ),
-            )),
-          ],
+              Positioned(
+                  child: Align(
+                alignment: FractionalOffset.center,
+                child: Center(
+                  child: Text(proximoNaFila,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          decoration: TextDecoration.none,
+                          fontSize: 32)),
+                ),
+              )),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => {}, label: const Text('Chamar Próximo')),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: () => {}, label: const Text('Chamar Próximo')),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              Divider(),
+              Expanded(
+                  child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: ListTile(
+                  title: Text('Exit'),
+                  onTap: () => {
+                    FirebaseAuth.instance.signOut(),
+                    Navigator.pushNamed(context, '/')
+                  },
+                ),
+              ))
+            ],
+          ),
+        ));
   }
 }
