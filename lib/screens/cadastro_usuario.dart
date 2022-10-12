@@ -120,7 +120,8 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                                             nome: _nomeController.text,
                                             email: _emailController.text,
                                             telefone: _telefoneController.text,
-                                            senha: _senhaController.text);
+                                            senha: _senhaController.text,
+                                            admin: false);
                                         insert(usuario);
                                         Navigator.pop(context);
                                       }

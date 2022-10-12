@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gestor_fila/models/usuarios.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -62,14 +63,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                         child: const Text("Login"),
                           onPressed: () async {
 
-                            await realizarLogin(_emailController.text, _senhaController.text) ? 
-                            Navigator.pushNamed(context, "/entrar_na_fila") 
-                            : showDialog(
+                            Usuario? usuario = await realizarLogin(_emailController.text, _senhaController.text);
+
+                            if (usuario == null) {
+                              showDialog(
                                 context: context,
                                 barrierDismissible: true,
                                 builder: (BuildContext context){
                                   return AlertDialog(
-                                    title: Text("Usuário/Senha inválido"),
+                                    title: const Text("Usuário/Senha inválido"),
                                     actions: [
                                       ElevatedButton(
                                         onPressed: (){ Navigator.pop(context); },
@@ -79,6 +81,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                                   );
                                 }
                               );
+                            } else {
+
+                              if (usuario.admin) {
+                                Navigator.pushNamed(context, "/admin");
+                              } else {
+                                Navigator.pushNamed(context, "/entrar_na_fila");
+                              }
+                              
+                            }
                           },
                           ),
                     ),
@@ -98,7 +109,7 @@ class _HomeWidgetState extends State<HomeWidget> {
     );
   }
 
-  Future<bool> realizarLogin (String email, String senha) async {
+  Future<Usuario?> realizarLogin (String email, String senha) async {
 
     var result = await FirebaseFirestore.instance.collection("usuarios")
     .where("email", isEqualTo: email)
@@ -106,11 +117,11 @@ class _HomeWidgetState extends State<HomeWidget> {
     .get();
 
 
-  if (result.docs.isEmpty) {
-    return false;
+  if (result.docs.isNotEmpty) {
+    return Usuario.fromSnapshot(result.docs.first);
   }
   
-  return true;
+  return null;
 
   }
 }
