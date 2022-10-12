@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gestor_fila/models/usuarios.dart';
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -9,6 +11,10 @@ class HomeWidget extends StatefulWidget {
 }
 
 class _HomeWidgetState extends State<HomeWidget> {
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(700, 1400));
@@ -28,20 +34,22 @@ class _HomeWidgetState extends State<HomeWidget> {
                     child: Image.asset('images/queue-logo.png')),
               ),
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15),
+             Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Email', hintText: 'Digite seu email'),
+                    controller: _emailController,
               ),
             ),
-            const Padding(
+             Padding(
               padding:
-                  EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
+                  const EdgeInsets.only(left: 15.0, right: 15.0, top: 15, bottom: 0),
               child: TextField(
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                     labelText: 'Senha', hintText: 'Digite a sua senha'),
+                    controller: _senhaController,
               ),
             ),
             Padding(
@@ -52,10 +60,38 @@ class _HomeWidgetState extends State<HomeWidget> {
                     Padding(
                       padding: const EdgeInsets.only(right: 5.0),
                       child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, "/entrar_na_fila");
+                        child: const Text("Login"),
+                          onPressed: () async {
+
+                            Usuario? usuario = await realizarLogin(_emailController.text, _senhaController.text);
+
+                            if (usuario == null) {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (BuildContext context){
+                                  return AlertDialog(
+                                    title: const Text("Usuário/Senha inválido"),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: (){ Navigator.pop(context); },
+                                        child: const Text("Ok"),
+                                      )
+                                    ],
+                                  );
+                                }
+                              );
+                            } else {
+
+                              if (usuario.admin) {
+                                Navigator.pushNamed(context, "/admin");
+                              } else {
+                                Navigator.pushNamed(context, "/entrar_na_fila");
+                              }
+                              
+                            }
                           },
-                          child: const Text("Login")),
+                          ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: 5.0),
@@ -71,5 +107,21 @@ class _HomeWidgetState extends State<HomeWidget> {
         ),
       ),
     );
+  }
+
+  Future<Usuario?> realizarLogin (String email, String senha) async {
+
+    var result = await FirebaseFirestore.instance.collection("usuarios")
+    .where("email", isEqualTo: email)
+    .where("senha", isEqualTo: senha)
+    .get();
+
+
+  if (result.docs.isNotEmpty) {
+    return Usuario.fromSnapshot(result.docs.first);
+  }
+  
+  return null;
+
   }
 }

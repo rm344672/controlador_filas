@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestor_fila/screens/entrar_fila.dart';
 
+
+import '../models/Filas.dart';
+
 class FilaWidget extends StatefulWidget {
   const FilaWidget({Key? key}) : super(key: key);
 
@@ -10,9 +13,12 @@ class FilaWidget extends StatefulWidget {
 }
 
 class _FilaWidgetState extends State<FilaWidget> {
-  String proximoNaFila = "1";
   @override
   Widget build(BuildContext context) {
+
+
+    final args = ModalRoute.of(context)!.settings.arguments as Filas;
+
     ScreenUtil.init(context, designSize: const Size(700, 1400));
     return Scaffold(
       appBar: AppBar(
@@ -39,7 +45,7 @@ class _FilaWidgetState extends State<FilaWidget> {
                 child: Align(
               alignment: FractionalOffset.center,
               child: Center(
-                child: Text(proximoNaFila,
+                child: Text(args.id_ultimo.toString(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         color: Colors.black,
@@ -56,4 +62,5 @@ class _FilaWidgetState extends State<FilaWidget> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
+
 }
