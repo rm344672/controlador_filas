@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestor_fila/models/Filas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gestor_fila/models/usuarios.dart';
 
 class EntrarFilaWidget extends StatefulWidget {
   const EntrarFilaWidget({Key? key}) : super(key: key);
@@ -11,13 +13,37 @@ class EntrarFilaWidget extends StatefulWidget {
 }
 
 class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
+  Usuario? currentUser = null;
+  getCurrentUser() async {
+    String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
+
+    var findUserByEmail = await FirebaseFirestore.instance
+          .collection("usuarios")
+          .where("email", isEqualTo: emailUserLogged)
+          .get();
+
+    Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
+    setCurrentUser(user);
+  }
+
+  setCurrentUser(Usuario user){
+    currentUser = user;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    
+    getCurrentUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(context, designSize: const Size(700, 1400));
     return Scaffold(
         appBar: AppBar(
-          title: const Text("Entrar em fila"),
-        ),
+            title: const Text("Entrar em fila"),
+            automaticallyImplyLeading: false),
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -34,10 +60,12 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
             padding: const EdgeInsets.only(left: 5.0),
             child: ElevatedButton(
                 onPressed: () async {
-                  var result = await FirebaseFirestore.instance.collection(
-                    "fila").where("id_fila", isEqualTo: 1).get();
+                  var result = await FirebaseFirestore.instance
+                      .collection("fila")
+                      .where("id_fila", isEqualTo: 1)
+                      .get();
                   Filas filas = Filas.fromSnapshot(result.docs.first);
-                  Navigator.pushNamed(context, arguments:  filas, "/fila");
+                  Navigator.pushNamed(context, arguments: filas, "/fila");
                 },
                 child: const Text("Entrar na fila de Espera")),
           )
