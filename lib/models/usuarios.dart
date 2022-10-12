@@ -4,7 +4,6 @@ class Usuario {
   int? id;
   final String nome;
   final String email;
-  final String senha;
   final String telefone;
   final bool admin;
 
@@ -14,7 +13,6 @@ class Usuario {
     this.id,
     required this.nome,
     required this.email,
-    required this.senha,
     required this.telefone,
     required this.admin
   });
@@ -23,7 +21,6 @@ class Usuario {
       : nome = map['nome'],
         email = map['email'],
         telefone = map['telefone'],
-        senha = map['senha'],
         admin = map['admin'];
 
   Usuario.fromSnapshot(QueryDocumentSnapshot snapshot)
@@ -31,5 +28,5 @@ class Usuario {
             reference: snapshot.reference);
 
   Map<String, dynamic> toJson() =>
-      {"nome": nome, "email": email, "telefone": telefone, "senha": senha, "admin": admin};
+      {"nome": nome, "email": email, "telefone": telefone, "admin": admin};
 }

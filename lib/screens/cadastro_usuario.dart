@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestor_fila/models/usuarios.dart';
@@ -8,6 +11,8 @@ class CadastroWidget extends StatefulWidget {
 
   @override
   State<CadastroWidget> createState() => _CadastroWidgetState();
+
+  
 }
 
 class _CadastroWidgetState extends State<CadastroWidget> {
@@ -114,16 +119,19 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                               Padding(
                                 padding: const EdgeInsets.only(left: 5.0),
                                 child: ElevatedButton(
-                                    onPressed: () {
+                                    onPressed: () async {
                                       if (_formKey.currentState!.validate()) {
                                         Usuario usuario = Usuario(
                                             nome: _nomeController.text,
                                             email: _emailController.text,
                                             telefone: _telefoneController.text,
-                                            senha: _senhaController.text,
                                             admin: false);
-                                        insert(usuario);
-                                        Navigator.pop(context);
+                                        String insertUser = await insert(usuario, _senhaController.text);
+                                        if (insertUser == "success") {
+                                          Navigator.pop(context);
+                                        }else{
+                                          exibeAlerta(context, insertUser.toString());
+                                        }
                                       }
                                     },
                                     child: const Text("Cadastrar")),
@@ -133,7 +141,34 @@ class _CadastroWidgetState extends State<CadastroWidget> {
                     ]))));
   }
 
-  insert(Usuario usuario) async {
-    FirebaseFirestore.instance.collection("usuarios").add(usuario.toJson());
+  insert(Usuario usuario, senha) async {
+    try {
+      final credential = await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: usuario.email, password: senha);
+
+      var jsonUser = usuario.toJson();
+
+      FirebaseFirestore.instance.collection("usuarios").add(jsonUser);
+      return "success";
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        return "Senha muito fraca";
+      } else if (e.code == 'email-already-in-use') {
+        return "Email já está em uso";
+      }
+    } catch (e) {
+      return "Houve um erro inesperado";
+    }
+    return "Houve um erro inesperado";
+  }
+
+  exibeAlerta(BuildContext context, String texto) {
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: const Text("Houve um erro inesperado"),
+        content: Text(texto)
+      );
+    });
   }
 }

@@ -1,4 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../models/usuarios.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({Key? key}) : super(key: key);
@@ -10,12 +14,36 @@ class AdminWidget extends StatefulWidget {
 class _AdminWidgetState extends State<AdminWidget> {
   String proximoNaFila = "1";
 
+  Usuario? currentUser = null;
+  getCurrentUser() async {
+    String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
+
+    var findUserByEmail = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .where("email", isEqualTo: emailUserLogged)
+        .get();
+
+    Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
+    setCurrentUser(user);
+  }
+
+  setCurrentUser(Usuario user) {
+    currentUser = user;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    getCurrentUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Controle de filas - Admin"),
-      ),
+          title: const Text("Controle de filas - Admin"),
+          automaticallyImplyLeading: false),
       body: SizedBox(
         height: double.maxFinite,
         child: Stack(
