@@ -18,22 +18,22 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
     String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
 
     var findUserByEmail = await FirebaseFirestore.instance
-          .collection("usuarios")
-          .where("email", isEqualTo: emailUserLogged)
-          .get();
+        .collection("usuarios")
+        .where("email", isEqualTo: emailUserLogged)
+        .get();
 
     Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
     setCurrentUser(user);
   }
 
-  setCurrentUser(Usuario user){
+  setCurrentUser(Usuario user) {
     currentUser = user;
   }
 
   @override
   void initState() {
     super.initState();
-    
+
     getCurrentUser();
   }
 
@@ -43,7 +43,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
     return Scaffold(
         appBar: AppBar(
             title: const Text("Entrar em fila"),
-            automaticallyImplyLeading: false),
+            ),
         body: Center(
             child:
                 Column(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -69,6 +69,24 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
                 },
                 child: const Text("Entrar na fila de Espera")),
           )
-        ])));
+        ])),
+        drawer: Drawer(
+          child: ListView(
+            children: [
+              Divider(),
+              Expanded(
+                  child: Align(
+                alignment: FractionalOffset.bottomCenter,
+                child: ListTile(
+                  title: Text('Exit'),
+                  onTap: () => {
+                    FirebaseAuth.instance.signOut(),
+                    Navigator.pushNamed(context, '/')
+                  },
+                ),
+              ))
+            ],
+          ),
+        ));
   }
 }
