@@ -14,6 +14,7 @@ class EntrarFilaWidget extends StatefulWidget {
 
 class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
   Usuario? currentUser = null;
+  String? docUserLogged = null; 
   getCurrentUser() async {
     String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
 
@@ -23,6 +24,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
         .get();
 
     Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
+    docUserLogged = findUserByEmail.docs.first.reference.id;
     setCurrentUser(user);
   }
 
@@ -60,12 +62,8 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
             padding: const EdgeInsets.only(left: 5.0),
             child: ElevatedButton(
                 onPressed: () async {
-                  var result = await FirebaseFirestore.instance
-                      .collection("fila")
-                      .where("id_fila", isEqualTo: 1)
-                      .get();
-                  Filas filas = Filas.fromSnapshot(result.docs.first);
-                  Navigator.pushNamed(context, arguments: filas, "/fila");
+
+                  Navigator.pushNamed(context, arguments: await insertFila(), "/fila");
                 },
                 child: const Text("Entrar na fila de Espera")),
           )
@@ -88,5 +86,33 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
             ],
           ),
         ));
+  }
+
+
+  Future<Filas> insertFila() async {
+    
+    var allUsers = FirebaseFirestore.instance.collection('fila');
+    
+    int newID = await allUsers.get().then((QuerySnapshot snapshot){
+      return snapshot.size + 1;
+    });
+
+    Filas fila = Filas(
+      id_atual: newID,
+      doc_user: "teste"
+    );
+    
+    var jsonUser = fila.toJson();
+
+     try {
+
+    FirebaseFirestore.instance.collection("fila").add(jsonUser);
+
+    }on FirebaseAuthException catch (e) {
+      //tratar erro
+    }
+
+    return fila;
+
   }
 }

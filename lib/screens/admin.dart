@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/usuarios.dart';
+import '../models/filas.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({Key? key}) : super(key: key);
@@ -22,7 +23,7 @@ class _AdminWidgetState extends State<AdminWidget> {
         .collection("usuarios")
         .where("email", isEqualTo: emailUserLogged)
         .get();
-
+  
     Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
     setCurrentUser(user);
   }
@@ -59,18 +60,7 @@ class _AdminWidgetState extends State<AdminWidget> {
                               fontSize: 20)),
                     )),
               ),
-              Positioned(
-                  child: Align(
-                alignment: FractionalOffset.center,
-                child: Center(
-                  child: Text(proximoNaFila,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          color: Colors.black,
-                          decoration: TextDecoration.none,
-                          fontSize: 32)),
-                ),
-              )),
+              buildInfoUser(context),
             ],
           ),
         ),
@@ -95,5 +85,57 @@ class _AdminWidgetState extends State<AdminWidget> {
             ],
           ),
         ));
+  }
+
+  Widget buildInfoUser(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("fila")
+            .orderBy("id_atual", descending: false)
+            .limit(1)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return const LinearProgressIndicator();
+          if (snapshot.data == null) {
+            return Container(child: const Text("Nenhum carro encontrado"));
+          } else {
+            return buildNomeProximoFila(context, snapshot.data!.docs);
+          }
+        });
+  }
+
+  buildNomeProximoFila(
+      BuildContext context, List<QueryDocumentSnapshot> snapshot) {
+    Filas fila = Filas.fromSnapshot(snapshot[0]);
+    final proximoNaFila = fila.id_atual;
+    //final nomeUser = getUser(fila.doc_user);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Positioned(
+            child: Align(
+          alignment: FractionalOffset.center,
+          child: Center(
+            child: Text("$proximoNaFila",
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                    color: Colors.black,
+                    decoration: TextDecoration.none,
+                    fontSize: 32)),
+          ),
+        ))
+      ],
+    );
+  }
+
+  Future<String> getUser(docUser) async {
+    var findNextUserByFila = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .doc(docUser)
+        .get();
+
+    return Usuario.fromJson(findNextUserByFila).nome;
   }
 }

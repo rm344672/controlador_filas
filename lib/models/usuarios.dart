@@ -9,13 +9,12 @@ class Usuario {
 
   DocumentReference? reference;
 
-  Usuario({
-    this.id,
-    required this.nome,
-    required this.email,
-    required this.telefone,
-    required this.admin
-  });
+  Usuario(
+      {this.id,
+      required this.nome,
+      required this.email,
+      required this.telefone,
+      required this.admin});
 
   Usuario.fromMap(Map<String, dynamic> map, {this.reference})
       : nome = map['nome'],
@@ -26,6 +25,15 @@ class Usuario {
   Usuario.fromSnapshot(QueryDocumentSnapshot snapshot)
       : this.fromMap(snapshot.data() as Map<String, dynamic>,
             reference: snapshot.reference);
+
+  factory Usuario.fromJson(DocumentSnapshot docSnapshot) {
+    return Usuario(
+      nome: docSnapshot.get('nome'),
+      email: docSnapshot.get('email'),
+      telefone: docSnapshot.get('telefone'),
+      admin: docSnapshot.get('admin'),
+    );
+  }
 
   Map<String, dynamic> toJson() =>
       {"nome": nome, "email": email, "telefone": telefone, "admin": admin};
