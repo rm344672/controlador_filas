@@ -99,7 +99,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
 
     Filas fila = Filas(
       id_atual: newID,
-      doc_user: "teste"
+      doc_user: docUserLogged,
     );
     
     var jsonUser = fila.toJson();

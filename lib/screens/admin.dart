@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../models/usuarios.dart';
-import '../models/filas.dart';
+import '../models/Filas.dart';
 
 class AdminWidget extends StatefulWidget {
   const AdminWidget({Key? key}) : super(key: key);
@@ -97,7 +97,7 @@ class _AdminWidgetState extends State<AdminWidget> {
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const LinearProgressIndicator();
           if (snapshot.data == null) {
-            return Container(child: const Text("Nenhum carro encontrado"));
+            return Container(child: const Text("Nenhum usuário na fila"));
           } else {
             return buildNomeProximoFila(context, snapshot.data!.docs);
           }
