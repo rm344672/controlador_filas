@@ -45,7 +45,7 @@ class _FilaWidgetState extends State<FilaWidget> {
                 child: Align(
               alignment: FractionalOffset.center,
               child: Center(
-                child: Text(args.id_ultimo.toString(),
+                child: Text(args.id_atual.toString(),
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         color: Colors.black,

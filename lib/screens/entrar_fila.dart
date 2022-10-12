@@ -14,6 +14,7 @@ class EntrarFilaWidget extends StatefulWidget {
 
 class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
   Usuario? currentUser = null;
+  String? docUserLogged = null; 
   getCurrentUser() async {
     String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
 
@@ -23,6 +24,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
         .get();
 
     Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
+    docUserLogged = findUserByEmail.docs.first.reference.id;
     setCurrentUser(user);
   }
 
