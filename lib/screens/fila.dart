@@ -9,21 +9,49 @@ import 'package:flutter/foundation.dart';
 
 
 import '../models/Filas.dart';
+import '../models/usuarios.dart';
 
 class FilaWidget extends StatefulWidget {
   const FilaWidget({Key? key}) : super(key: key);
   
-
+  
   @override
   State<FilaWidget> createState() => _FilaWidgetState();
 }
 
 class _FilaWidgetState extends State<FilaWidget> {
 
+  String? doc_user = null;
+
+  Usuario? currentUser = null;
+  String? docUserLogged = null;
+  getCurrentUser() async {
+    String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
+
+    var findUserByEmail = await FirebaseFirestore.instance
+        .collection("usuarios")
+        .where("email", isEqualTo: emailUserLogged)
+        .get();
+  
+    Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
+    docUserLogged = findUserByEmail.docs.first.reference.id;
+
+
+    setCurrentUser(user);
+  }
+
+  setCurrentUser(Usuario user) {
+    currentUser = user;
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     
     final args = ModalRoute.of(context)!.settings.arguments as Filas;
+
+     doc_user = args.doc_user;
 
     ScreenUtil.init(context, designSize: const Size(700, 1400));
     return Scaffold(
@@ -47,18 +75,7 @@ class _FilaWidgetState extends State<FilaWidget> {
                             fontSize: 20)),
                   )),
             ),
-            Positioned(
-                child: Align(
-              alignment: FractionalOffset.center,
-              child: Center(
-                child: Text(args.id_atual.toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        color: Colors.black,
-                        decoration: TextDecoration.none,
-                        fontSize: 32)),
-              ),
-            )),
+            buildInfoUser(context)
           ],
         ),
       ),
@@ -102,4 +119,41 @@ class _FilaWidgetState extends State<FilaWidget> {
         .update({"id_atual": FieldValue.increment(-1)});
         });     
    }
+
+  Widget buildInfoUser(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection("fila")
+            .where("doc_user", isEqualTo: docUserLogged)
+            .snapshots(),
+        builder: ((context, snapshot) {
+          if (snapshot.data == null || snapshot.data!.docs == null) {
+            return Container(child: const Text("Nenhum usuário na fila"));
+          } else {
+            return buildFilaRefresh(context, snapshot.data!.docs);
+          }
+        }));
+  }
+
+  Widget buildFilaRefresh(
+    BuildContext context, List<QueryDocumentSnapshot> snapshot){
+      
+      if (snapshot[0] == null){
+        return Container(child: const Text("Nenhum usuário na fila")); 
+      }
+    
+    Filas fila = Filas.fromSnapshot(snapshot[0]);
+    return Positioned(
+                child: Align(
+              alignment: FractionalOffset.center,
+              child: Center(
+                child: Text(fila.id_atual.toString(),
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        color: Colors.black,
+                        decoration: TextDecoration.none,
+                        fontSize: 32)),
+              ),
+            ));
+  }
 }
