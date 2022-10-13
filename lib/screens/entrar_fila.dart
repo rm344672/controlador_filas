@@ -100,25 +100,13 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
       
     var ultimaPosicao = FirebaseFirestore.instance.collection('fila');
 
-<<<<<<< Updated upstream
-    FilaUser filaUser = FilaUser(
-      pos_fila: newID,
-      doc_user: docUserLogged,
-    );
-    
-    var jsonUser = filaUser.toJson();
-=======
       FilaUser filaUser = FilaUser(
         pos_fila: 1,
         doc_user: docUserLogged
       );
->>>>>>> Stashed changes
 
     var jsonUser = filaUser.toJson();
 
-<<<<<<< Updated upstream
-    FirebaseFirestore.instance.collection("fila_user").add(jsonUser);
-=======
     FirebaseFirestore.instance.collection("fila").add(jsonUser);
    
     final QuerySnapshot snapshot= await FirebaseFirestore.instance
@@ -127,14 +115,10 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
     
     Filas.fromSnapshot(snapshot);
     updateFila(fila);
->>>>>>> Stashed changes
 
     }
     }
 
-<<<<<<< Updated upstream
-    return filaUser;
-=======
   updateFila(Filas fila) async{
 
     final QuerySnapshot<Map<String, dynamic>> snapshot= await FirebaseFirestore.instance
@@ -148,6 +132,5 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
         .update({"ultima_pos": FieldValue.increment(1)});
    
    }
->>>>>>> Stashed changes
 
 }
