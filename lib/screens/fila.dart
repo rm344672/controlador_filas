@@ -72,7 +72,7 @@ class _FilaWidgetState extends State<FilaWidget> {
     .then((QuerySnapshot snapshot){
     snapshot.docs.forEach((DocumentSnapshot element) {
       if(doc_user == element.get('doc_user')){
-          FirebaseFirestore.instance.collection('fila')
+          FirebaseFirestore.instance.collection('fila_user')
           .doc(element.id)
           .delete();   
       }
