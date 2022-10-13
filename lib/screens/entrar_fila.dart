@@ -103,7 +103,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
   
       Filas filas = Filas.fromSnapshot(fila.docs.first);
 
-      FilaUser filaUser = FilaUser(pos_fila: filas.ultima_pos, doc_user: docUserLogged);
+      FilaUser filaUser = FilaUser(pos_fila: filas.ultima_pos + 1, doc_user: docUserLogged);
 
       FirebaseFirestore.instance.collection("fila_user").add(filaUser.toJson());
 
