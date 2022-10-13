@@ -65,7 +65,10 @@ class _AdminWidgetState extends State<AdminWidget> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-            onPressed: () => {}, label: const Text('Chamar Próximo')),
+            onPressed: () => {
+              updateFila
+            }, 
+            label: const Text('Chamar Próximo')),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         drawer: Drawer(
           child: ListView(
@@ -91,8 +94,6 @@ class _AdminWidgetState extends State<AdminWidget> {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("fila")
-            .orderBy("id_atual", descending: false)
-            .limit(1)
             .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) return const LinearProgressIndicator();
@@ -105,10 +106,9 @@ class _AdminWidgetState extends State<AdminWidget> {
   }
 
   buildNomeProximoFila(
-      BuildContext context, List<QueryDocumentSnapshot> snapshot) {
+    BuildContext context, List<QueryDocumentSnapshot> snapshot) {
     Filas fila = Filas.fromSnapshot(snapshot[0]);
-    final proximoNaFila = fila.id_atual;
-    //final nomeUser = getUser(fila.doc_user);
+    final proximoNaFila = fila.pos_atual;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -137,5 +137,19 @@ class _AdminWidgetState extends State<AdminWidget> {
         .get();
 
     return Usuario.fromJson(findNextUserByFila).nome;
+  }
+
+
+  updateFila() async{
+
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+    .collection("fila")
+    .get();  
+
+    DocumentSnapshot element = snapshot.docs.first;
+    FirebaseFirestore.instance.collection("fila")
+      .doc(element.id)
+      .update({"pos_atual": FieldValue.increment(1)});    
+
   }
 }
