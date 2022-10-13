@@ -21,37 +21,10 @@ class FilaWidget extends StatefulWidget {
 
 class _FilaWidgetState extends State<FilaWidget> {
 
-  String? doc_user = null;
-
-  Usuario? currentUser = null;
-  String? docUserLogged = null;
-  getCurrentUser() async {
-    String? emailUserLogged = FirebaseAuth.instance.currentUser?.email;
-
-    var findUserByEmail = await FirebaseFirestore.instance
-        .collection("usuarios")
-        .where("email", isEqualTo: emailUserLogged)
-        .get();
-  
-    Usuario user = Usuario.fromSnapshot(findUserByEmail.docs.first);
-    docUserLogged = findUserByEmail.docs.first.reference.id;
-
-
-    setCurrentUser(user);
-  }
-
-  setCurrentUser(Usuario user) {
-    currentUser = user;
-  }
-
-
-
   @override
   Widget build(BuildContext context) {
     
     final args = ModalRoute.of(context)!.settings.arguments as Filas;
-
-     doc_user = args.doc_user;
 
     ScreenUtil.init(context, designSize: const Size(700, 1400));
     return Scaffold(
@@ -75,7 +48,7 @@ class _FilaWidgetState extends State<FilaWidget> {
                             fontSize: 20)),
                   )),
             ),
-            buildInfoUser(context)
+            buildInfoUser(context, args.doc_user)
           ],
         ),
       ),
@@ -120,11 +93,11 @@ class _FilaWidgetState extends State<FilaWidget> {
         });     
    }
 
-  Widget buildInfoUser(BuildContext context) {
+  Widget buildInfoUser(BuildContext context, doc_user) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("fila")
-            .where("doc_user", isEqualTo: docUserLogged)
+            .where("doc_user", isEqualTo: doc_user)
             .snapshots(),
         builder: ((context, snapshot) {
           if (snapshot.data == null || snapshot.data!.docs == null) {
@@ -137,8 +110,7 @@ class _FilaWidgetState extends State<FilaWidget> {
 
   Widget buildFilaRefresh(
     BuildContext context, List<QueryDocumentSnapshot> snapshot){
-      
-      if (snapshot[0] == null){
+      if (snapshot.isEmpty && snapshot[0] == null){
         return Container(child: const Text("Nenhum usuário na fila")); 
       }
     
