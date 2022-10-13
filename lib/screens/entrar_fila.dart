@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestor_fila/models/Filas.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gestor_fila/models/fila_user.dart';
 import 'package:gestor_fila/models/usuarios.dart';
 
 class EntrarFilaWidget extends StatefulWidget {
@@ -89,7 +90,7 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
   }
 
 
-  Future<Filas> insertFila() async {
+  Future<FilaUser> insertFila() async {
     
     var allUsers = FirebaseFirestore.instance.collection('fila');
     
@@ -97,8 +98,8 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
       return snapshot.size + 1;
     });
 
-    Filas fila = Filas(
-      id_atual: newID,
+    FilaUser fila = FilaUser(
+      pos_fila: newID,
       doc_user: docUserLogged,
     );
     

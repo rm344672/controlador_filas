@@ -55,7 +55,6 @@ class _FilaWidgetState extends State<FilaWidget> {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () => {
             deleteFila(args),
-            updateFila(args),
             Navigator.pushNamed(context, "/entrar_na_fila")},
           label: const Text('Sair da Fila')),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -79,24 +78,10 @@ class _FilaWidgetState extends State<FilaWidget> {
     });
   }
 
-  updateFila(Filas fila) async{
-
-    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
-    .collection("fila")
-    .where("id_atual", isGreaterThan: fila.id_atual)
-    .get();  
-
-   snapshot.docs.forEach((DocumentSnapshot element) { 
-        var update = FirebaseFirestore.instance.collection("fila")
-        .doc(element.id)
-        .update({"id_atual": FieldValue.increment(-1)});
-        });     
-   }
-
   Widget buildInfoUser(BuildContext context, doc_user) {
     return StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
-            .collection("fila")
+            .collection("fila_user")
             .where("doc_user", isEqualTo: doc_user)
             .snapshots(),
         builder: ((context, snapshot) {
