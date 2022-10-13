@@ -2,21 +2,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Filas {
-  int? id_atual;
-  final String? doc_user;
+  int? pos_atual;
+  int? ultima_pos;
 
   DocumentReference? reference;
 
 
-  Filas({this.id_atual, required this.doc_user});
+  Filas({this.pos_atual, required this.ultima_pos});
 
       Filas.fromMap(Map<String, dynamic> map, {this.reference})
-      : id_atual = map['id_atual'],
-        doc_user = map['doc_user'];
+      : pos_atual = map['id_atual'],
+        ultima_pos = map['doc_user'];
 
 
     Map<String, dynamic> toJson() =>
-      {"id_atual": id_atual, "doc_user": doc_user};
+      {"id_atual": pos_atual, "doc_user": ultima_pos};
 
     Filas.fromSnapshot(QueryDocumentSnapshot snapshot)
       : this.fromMap(snapshot.data() as Map<String, dynamic>,
