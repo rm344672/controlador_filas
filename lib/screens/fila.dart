@@ -103,6 +103,8 @@ class _FilaWidgetState extends State<FilaWidget> {
     Filas fila = Filas.fromSnapshot(snapshot[0]);
     
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Positioned(
           child: Align(
