@@ -109,6 +109,10 @@ class _AdminWidgetState extends State<AdminWidget> {
     BuildContext context, List<QueryDocumentSnapshot> snapshot) {
     Filas fila = Filas.fromSnapshot(snapshot[0]);
     final proximoNaFila = fila.pos_atual;
+<<<<<<< Updated upstream
+=======
+    //final nomeUser = getUser(fila.doc_user);
+>>>>>>> Stashed changes
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

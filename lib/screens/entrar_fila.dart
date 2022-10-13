@@ -98,22 +98,22 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
       return snapshot.size + 1;
     });
 
-    FilaUser fila = FilaUser(
+    FilaUser filaUser = FilaUser(
       pos_fila: newID,
       doc_user: docUserLogged,
     );
     
-    var jsonUser = fila.toJson();
+    var jsonUser = filaUser.toJson();
 
      try {
 
-    FirebaseFirestore.instance.collection("fila").add(jsonUser);
+    FirebaseFirestore.instance.collection("fila_user").add(jsonUser);
 
     }on FirebaseAuthException catch (e) {
       //tratar erro
     }
 
-    return fila;
+    return filaUser;
 
   }
 }
