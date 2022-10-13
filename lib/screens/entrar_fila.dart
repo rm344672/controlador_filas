@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gestor_fila/models/Filas.dart';
+import 'package:gestor_fila/models/Filas_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gestor_fila/models/fila_user.dart';
@@ -92,28 +93,61 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
 
   Future<FilaUser> insertFila() async {
     
-    var allUsers = FirebaseFirestore.instance.collection('fila');
+    var usuarioLogado = FirebaseFirestore.instance.collection('fila')
+    .where("doc_user", isEqualTo: docUserLogged);
     
-    int newID = await allUsers.get().then((QuerySnapshot snapshot){
-      return snapshot.size + 1;
-    });
+    if (usuarioLogado == null){
+      
+    var ultimaPosicao = FirebaseFirestore.instance.collection('fila');
 
+<<<<<<< Updated upstream
     FilaUser filaUser = FilaUser(
       pos_fila: newID,
       doc_user: docUserLogged,
     );
     
     var jsonUser = filaUser.toJson();
+=======
+      FilaUser filaUser = FilaUser(
+        pos_fila: 1,
+        doc_user: docUserLogged
+      );
+>>>>>>> Stashed changes
 
-     try {
+    var jsonUser = filaUser.toJson();
 
+<<<<<<< Updated upstream
     FirebaseFirestore.instance.collection("fila_user").add(jsonUser);
+=======
+    FirebaseFirestore.instance.collection("fila").add(jsonUser);
+   
+    final QuerySnapshot snapshot= await FirebaseFirestore.instance
+    .collection("fila")
+    .get();
+    
+    Filas.fromSnapshot(snapshot);
+    updateFila(fila);
+>>>>>>> Stashed changes
 
-    }on FirebaseAuthException catch (e) {
-      //tratar erro
+    }
     }
 
+<<<<<<< Updated upstream
     return filaUser;
+=======
+  updateFila(Filas fila) async{
 
-  }
+    final QuerySnapshot<Map<String, dynamic>> snapshot= await FirebaseFirestore.instance
+    .collection("fila")
+    .get();
+
+    DocumentSnapshot element = snapshot.docs.first;
+
+      FirebaseFirestore.instance.collection("fila")
+        .doc(element.id)
+        .update({"ultima_pos": FieldValue.increment(1)});
+   
+   }
+>>>>>>> Stashed changes
+
 }
