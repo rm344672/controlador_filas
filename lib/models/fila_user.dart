@@ -9,7 +9,7 @@ class FilaUser {
   FilaUser({this.pos_fila, required this.doc_user});
 
   FilaUser.fromMap(Map<String, dynamic> map, {this.reference})
-    : pos_fila = map['id_atual'],
+    : pos_fila = map['pos_fila'],
     doc_user = map['doc_user'];
 
   Map<String, dynamic> toJson() =>
