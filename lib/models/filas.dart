@@ -2,13 +2,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Filas {
-  int? pos_atual;
-  int? ultima_pos;
+  int pos_atual;
+  int ultima_pos;
 
   DocumentReference? reference;
 
 
-  Filas({this.pos_atual, required this.ultima_pos});
+  Filas({required this.pos_atual, required this.ultima_pos});
 
       Filas.fromMap(Map<String, dynamic> map, {this.reference})
       : pos_atual = map['pos_atual'],

@@ -13,7 +13,6 @@ class AdminWidget extends StatefulWidget {
 }
 
 class _AdminWidgetState extends State<AdminWidget> {
-  String proximoNaFila = "1";
 
   Usuario? currentUser = null;
   getCurrentUser() async {
@@ -41,6 +40,7 @@ class _AdminWidgetState extends State<AdminWidget> {
 
   @override
   Widget build(BuildContext context) {
+    Future<Filas> filas;
     return Scaffold(
         appBar: AppBar(title: const Text("Controle de filas - Admin")),
         body: SizedBox(
@@ -65,8 +65,14 @@ class _AdminWidgetState extends State<AdminWidget> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-            onPressed: () => {
-              updateFila
+            onPressed: () async => {
+
+              filas = getFila();
+
+              if () {
+
+              }
+              
             }, 
             label: const Text('Chamar Próximo')),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -78,7 +84,7 @@ class _AdminWidgetState extends State<AdminWidget> {
                   child: Align(
                 alignment: FractionalOffset.bottomCenter,
                 child: ListTile(
-                  title: Text('Exit'),
+                  title: const Text('Exit'),
                   onTap: () => {
                     FirebaseAuth.instance.signOut(),
                     Navigator.pushNamed(context, '/')
@@ -140,16 +146,35 @@ class _AdminWidgetState extends State<AdminWidget> {
   }
 
 
-  updateFila() async{
-
+  Future<Filas> getFila () async {
     final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
     .collection("fila")
     .get();  
 
-    DocumentSnapshot element = snapshot.docs.first;
-    FirebaseFirestore.instance.collection("fila")
-      .doc(element.id)
-      .update({"pos_atual": FieldValue.increment(1)});    
+    Filas filas = Filas.fromSnapshot(snapshot.docs.first);
 
+    return filas;
+
+  }
+  Future<Filas?> updateFila(BuildContext context) async{
+
+    final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+    .collection("fila")
+    .get(); 
+
+      DocumentSnapshot element = snapshot.docs.first;
+      FirebaseFirestore.instance.collection("fila")
+      .doc(element.id)
+      .update({"pos_atual": FieldValue.increment(1)});   
+
+  }
+
+    exibeAlerta(BuildContext context, String texto) {
+    return showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: const Text("Alerta"),
+        content: Text(texto)
+      );
+    });
   }
 }
