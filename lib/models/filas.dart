@@ -11,12 +11,12 @@ class Filas {
   Filas({this.pos_atual, required this.ultima_pos});
 
       Filas.fromMap(Map<String, dynamic> map, {this.reference})
-      : pos_atual = map['id_atual'],
-        ultima_pos = map['doc_user'];
+      : pos_atual = map['pos_atual'],
+        ultima_pos = map['ultima_pos'];
 
 
     Map<String, dynamic> toJson() =>
-      {"id_atual": pos_atual, "doc_user": ultima_pos};
+      {"pos_atual": pos_atual, "ultima_pos": ultima_pos};
 
     Filas.fromSnapshot(QueryDocumentSnapshot snapshot)
       : this.fromMap(snapshot.data() as Map<String, dynamic>,
