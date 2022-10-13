@@ -40,7 +40,7 @@ class _AdminWidgetState extends State<AdminWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Future<Filas> filas;
+    
     return Scaffold(
         appBar: AppBar(title: const Text("Controle de filas - Admin")),
         body: SizedBox(
@@ -65,12 +65,15 @@ class _AdminWidgetState extends State<AdminWidget> {
           ),
         ),
         floatingActionButton: FloatingActionButton.extended(
-            onPressed: () async => {
+            onPressed: () async {
 
-              filas = getFila();
+              Filas? filas = await getFila();
 
-              if () {
-
+              if (filas.pos_atual < filas.ultima_pos) {
+                updateFila();
+              } else {
+                // ignore: use_build_context_synchronously
+                exibeAlerta(context, "Não existe mais usuários na fila");
               }
               
             }, 
@@ -156,7 +159,7 @@ class _AdminWidgetState extends State<AdminWidget> {
     return filas;
 
   }
-  Future<Filas?> updateFila(BuildContext context) async{
+  updateFila() async{
 
     final QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
     .collection("fila")
@@ -169,7 +172,7 @@ class _AdminWidgetState extends State<AdminWidget> {
 
   }
 
-    exibeAlerta(BuildContext context, String texto) {
+  exibeAlerta(BuildContext context, String texto) {
     return showDialog(context: context, builder: (context){
       return AlertDialog(
         title: const Text("Alerta"),
