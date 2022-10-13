@@ -69,7 +69,7 @@ class _AdminWidgetState extends State<AdminWidget> {
 
               Filas? filas = await getFila();
 
-              if (filas.pos_atual < filas.ultima_pos) {
+              if (filas.pos_atual! < filas.ultima_pos!) {
                 updateFila();
               } else {
                 // ignore: use_build_context_synchronously
