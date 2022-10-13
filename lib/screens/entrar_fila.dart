@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:gestor_fila/models/Filas.dart';
-import 'package:gestor_fila/models/Filas_user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gestor_fila/models/fila_user.dart';
+import 'package:gestor_fila/models/filas.dart';
 import 'package:gestor_fila/models/usuarios.dart';
 
 class EntrarFilaWidget extends StatefulWidget {
@@ -91,35 +90,36 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
   }
 
 
-  Future<FilaUser> insertFila() async {
-    
-    var usuarioLogado = FirebaseFirestore.instance.collection('fila')
-    .where("doc_user", isEqualTo: docUserLogged);
-    
-    if (usuarioLogado == null){
-      
-    var ultimaPosicao = FirebaseFirestore.instance.collection('fila');
+  Future<FilaUser?> insertFila() async {
+    QuerySnapshot usuarioLogado = await FirebaseFirestore.instance
+        .collection('fila_user')
+        .where("doc_user", isEqualTo: docUserLogged)
+        .get();
 
-      FilaUser filaUser = FilaUser(
-        pos_fila: 1,
-        doc_user: docUserLogged
-      );
+    if (usuarioLogado.docs.isEmpty) {
+      QuerySnapshot fila = await FirebaseFirestore.instance
+      .collection('fila')
+      .get();
+  
+      Filas filas = Filas.fromSnapshot(fila.docs.first);
 
-    var jsonUser = filaUser.toJson();
+      FilaUser filaUser = FilaUser(pos_fila: filas.ultima_pos, doc_user: docUserLogged);
 
-    FirebaseFirestore.instance.collection("fila").add(jsonUser);
-   
-    final QuerySnapshot snapshot= await FirebaseFirestore.instance
-    .collection("fila")
-    .get();
-    
-    Filas.fromSnapshot(snapshot);
-    updateFila(fila);
+      FirebaseFirestore.instance.collection("fila_user").add(filaUser.toJson());
+
+      updateFila(filas);
+
+      return filaUser;
+
+    } else {
+
+      return FilaUser.fromSnapshot(usuarioLogado.docs.first);
 
     }
-    }
 
-  updateFila(Filas fila) async{
+  }
+
+  updateFila(Filas filas) async{
 
     final QuerySnapshot<Map<String, dynamic>> snapshot= await FirebaseFirestore.instance
     .collection("fila")
@@ -131,6 +131,6 @@ class _EntrarFilaWidgetState extends State<EntrarFilaWidget> {
         .doc(element.id)
         .update({"ultima_pos": FieldValue.increment(1)});
    
-   }
+  }
 
 }
